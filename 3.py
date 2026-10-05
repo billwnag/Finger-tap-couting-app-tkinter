@@ -6,9 +6,9 @@ class FingerTapCounter:
         self.root = root
         self.root.title("Finger Tap Counter")
         self.root.geometry("480x620")
-        self.root.configure(bg="#181818")  # 整体暗色背景
+        self.root.configure(bg="#181818") 
 
-        # 状态变量
+
         self.duration_seconds = 30
         self.time_left = self.duration_seconds
         self.count = 0
@@ -16,21 +16,21 @@ class FingerTapCounter:
         self.timer_id = None
         self.current_key = "<space>"
 
-        # 点击主窗口空白处时失焦输入框
+
         self.root.bind("<Button-1>", self.on_root_click)
 
-        # ================= 1. 设置区域 (Settings Card) =================
+
         setting_card = tk.LabelFrame(
             root, text=" Settings ", fg="#888888", bg="#252526",
             bd=1, relief="solid", font=("Helvetica", 9, "bold")
         )
         setting_card.pack(fill="x", padx=15, pady=(15, 8))
 
-        # 内部容器
+
         setting_inner = tk.Frame(setting_card, bg="#252526", padx=10, pady=10)
         setting_inner.pack(fill="x")
 
-        # 布局
+
         tk.Label(setting_inner, text="Duration:", fg="#cccccc", bg="#252526", font=("Helvetica", 10)).grid(row=0, column=0, sticky="w", padx=2)
         self.duration_entry = tk.Entry(setting_inner, width=5, font=("Helvetica", 10), justify="center", bg="#333333", fg="#ffffff", insertbackground="#ffffff")
         self.duration_entry.insert(0, "30")
@@ -45,11 +45,11 @@ class FingerTapCounter:
         self.key_entry.insert(0, "space")
         self.key_entry.grid(row=0, column=4, padx=4)
 
-        # 屏蔽输入框焦点
+
         self.duration_entry.bind("<FocusIn>", self.unbind_key_temporarily)
         self.key_entry.bind("<FocusIn>", self.unbind_key_temporarily)
 
-        # 应用按钮 (加深背景、亮字体)
+
         self.apply_btn = tk.Button(
             setting_inner, text="Apply", command=self.apply_settings,
             font=("Helvetica", 9, "bold"), bg="#383838", fg="#64b5f6",
@@ -58,7 +58,7 @@ class FingerTapCounter:
         )
         self.apply_btn.grid(row=0, column=5, padx=(6, 0))
 
-        # ================= 2. 计时器区域 (Timer Card) =================
+
         timer_card = tk.Frame(root, bg="#2d2d30", bd=1, relief="solid")
         timer_card.pack(fill="x", padx=15, pady=8)
 
@@ -68,7 +68,6 @@ class FingerTapCounter:
         )
         self.timer_label.pack()
 
-        # ================= 3. 打点响应区域 (Tap Area Card) =================
         self.tap_card = tk.Frame(root, bg="#212121", bd=2, relief="groove")
         self.tap_card.pack(fill="both", expand=True, padx=15, pady=8)
 
@@ -79,12 +78,11 @@ class FingerTapCounter:
         )
         self.tap_area.pack(fill="both", expand=True, padx=10, pady=10)
 
-        # 绑定点击与按键事件
+
         self.tap_area.bind("<Button-1>", self.on_tap)
         self.tap_card.bind("<Button-1>", self.on_tap)
         self.bind_custom_key(self.current_key)
 
-        # ================= 4. 结果统计区域 (Count Card) =================
         count_card = tk.Frame(root, bg="#1e282d", bd=1, relief="solid")
         count_card.pack(fill="x", padx=15, pady=8)
 
@@ -94,7 +92,6 @@ class FingerTapCounter:
         )
         self.count_label.pack()
 
-        # ================= 5. 重置按钮 (Reset Button Area) =================
         self.reset_btn = tk.Button(
             root, text="RESET", command=self.reset,
             font=("Helvetica", 12, "bold"), bg="#37474f", fg="#ffffff",
@@ -104,19 +101,16 @@ class FingerTapCounter:
         self.reset_btn.pack(fill="x", padx=15, pady=(8, 15))
 
     def unbind_key_temporarily(self, event=None):
-        """输入框聚焦时解绑热键"""
         if self.current_key:
             self.root.unbind(self.current_key)
 
     def on_root_click(self, event):
-        """点击空白区域失焦"""
         widget = event.widget
         if widget not in [self.duration_entry, self.key_entry]:
             self.root.focus_set()
             self.bind_custom_key(self.key_entry.get())
 
     def bind_custom_key(self, key_name):
-        """绑定指定打点按键"""
         if self.current_key:
             self.root.unbind(self.current_key)
 
@@ -136,7 +130,6 @@ class FingerTapCounter:
             self.root.bind(self.current_key, self.on_tap)
 
     def apply_settings(self):
-        """应用设置"""
         if self.is_running:
             messagebox.showwarning("Warning", "Test is running! Please reset before changing settings.")
             return
@@ -171,7 +164,7 @@ class FingerTapCounter:
             self.is_running = True
             key_display = self.key_entry.get()
             self.tap_area.config(text=f"Counting...\n(Current Key: {key_display})", fg="#e0e0e0")
-            self.tap_card.config(bg="#1b3a4b")  # 激活状态时卡片换深蓝背景
+            self.tap_card.config(bg="#1b3a4b")
             self.tap_area.config(bg="#1b3a4b")
             self.update_timer()
 
